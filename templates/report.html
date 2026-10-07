@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Daily report - Guess the Word{% endblock %}
+{% block content %}
+<section class="card">
+  <h1>Daily report</h1>
+  <form method="get" class="inline">
+    <label>Date
+      <input type="date" name="date" value="{{ day }}" required>
+    </label>
+    <button type="submit">Show report</button>
+  </form>
+
+  <div class="stats">
+    <div class="stat"><span>{{ summary['users'] }}</span>Users played</div>
+    <div class="stat"><span>{{ summary['games'] }}</span>Games played</div>
+    <div class="stat"><span>{{ summary['correct'] }}</span>Correct guesses (games won)</div>
+    <div class="stat"><span>{{ summary['lost'] }}</span>Games lost</div>
+    <div class="stat"><span>{{ summary['in_progress'] }}</span>In progress</div>
+    <div class="stat"><span>{{ total_guesses }}</span>Words guessed (total)</div>
+  </div>
+
+  <h2>Details for {{ day }}</h2>
+  {% if details %}
+  <table>
+    <thead>
+      <tr><th>User</th><th>Word given</th><th>Words guessed</th><th>No. of guesses</th><th>Result</th></tr>
+    </thead>
+    <tbody>
+      {% for d in details %}
+      <tr>
+        <td>{{ d['username'] }}</td>
+        <td>{{ d['word'] }}</td>
+        <td>{{ d['guesses'] or '-' }}</td>
+        <td>{{ d['guess_count'] }}</td>
+        <td>
+          {% if d['status'] == 'won' %}Won
+          {% elif d['status'] == 'lost' %}Lost
+          {% else %}In progress{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <p class="hint">No games were played on this date.</p>
+  {% endif %}
+</section>
+{% endblock %}

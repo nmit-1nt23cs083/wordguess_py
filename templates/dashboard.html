@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Play - Guess the Word{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>Welcome, {{ g.user['username'] }}!</h1>
+  <p>Guess the hidden 5-letter word in at most 5 tries.</p>
+  <p>Words played today: <b>{{ played }} / {{ max_games }}</b></p>
+
+  {% if active %}
+    <p>You have a game in progress.</p>
+    <form method="post" action="{{ url_for('play') }}">
+      <button type="submit">Continue game</button>
+    </form>
+  {% elif remaining > 0 %}
+    <form method="post" action="{{ url_for('play') }}">
+      <button type="submit">Start new game</button>
+    </form>
+  {% else %}
+    <p class="flash error">You have used all {{ max_games }} words for today. Come back tomorrow!</p>
+  {% endif %}
+
+  <h2>How to play</h2>
+  <ul class="legend">
+    <li><span class="tile green small">A</span> Right letter, right position</li>
+    <li><span class="tile orange small">B</span> Right letter, wrong position</li>
+    <li><span class="tile grey small">C</span> Letter is not in the word</li>
+  </ul>
+</section>
+{% endblock %}

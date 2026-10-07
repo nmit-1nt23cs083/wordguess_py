@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Register - Guess the Word{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>Create a player account</h1>
+  <form method="post">
+    <label>Username
+      <input type="text" name="username" required minlength="5" pattern="[A-Za-z]{5,}"
+             title="At least 5 letters (upper or lower case), letters only" autofocus
+             autocomplete="username">
+    </label>
+    <label>Password
+      <input type="password" name="password" required minlength="5"
+             title="At least 5 characters with a letter, a number and one of $ % *"
+             autocomplete="new-password">
+    </label>
+    <ul class="rules">
+      <li>Username: at least 5 letters (upper or lower case).</li>
+      <li>Password: at least 5 characters, with letters, numbers and one of the special characters <b>$</b> <b>%</b> <b>*</b>.</li>
+    </ul>
+    <button type="submit">Register</button>
+  </form>
+  <p class="hint">Already registered? <a href="{{ url_for('login') }}">Log in</a>.</p>
+</section>
+{% endblock %}

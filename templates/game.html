@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Game - Guess the Word{% endblock %}
+{% block content %}
+<section class="card narrow">
+  <h1>Guess the word</h1>
+  <p class="hint">Guess {{ [board|length + 1, max_guesses]|min }} of {{ max_guesses }}</p>
+
+  <div class="board" aria-label="Guess board">
+    {% for row in board %}
+      <div class="row">
+        {% for letter, colour in row %}
+          <div class="tile {{ colour }}">{{ letter }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    {% for _ in range(blank_rows) %}
+      <div class="row">
+        {% for _ in range(word_length) %}<div class="tile empty"></div>{% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% if game['status'] == 'active' %}
+    <form method="post" action="{{ url_for('submit_guess', game_id=game['id']) }}" class="guess-form">
+      <input id="guess" type="text" name="guess" maxlength="{{ word_length }}" minlength="{{ word_length }}"
+             pattern="[A-Z]{{ '{' }}{{ word_length }}{{ '}' }}" required autofocus autocomplete="off"
+             placeholder="ENTER GUESS" title="5 upper-case letters">
+      <button type="submit">Submit</button>
+    </form>
+  {% endif %}
+  <p class="hint"><a href="{{ url_for('dashboard') }}">Back to dashboard</a></p>
+</section>
+
+{% if game['status'] != 'active' %}
+<div class="modal-backdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    {% if game['status'] == 'won' %}
+      <h2>Congratulations!</h2>
+      <p>You guessed the word <b>{{ game['word'] }}</b> correctly.</p>
+    {% else %}
+      <h2>Better luck next time</h2>
+      <p>The word was <b>{{ game['word'] }}</b>.</p>
+    {% endif %}
+    <a class="button" href="{{ url_for('dashboard') }}">OK</a>
+  </div>
+</div>
+{% endif %}
+
+<script>
+  // Letters are always shown in upper case, and only A-Z is accepted.
+  var input = document.getElementById("guess");
+  if (input) {
+    input.addEventListener("input", function () {
+      input.value = input.value.toUpperCase().replace(/[^A-Z]/g, "");
+    });
+  }
+</script>
+{% endblock %}
