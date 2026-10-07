@@ -1,4 +1,4 @@
-or# Guess the Word
+# Guess the Word
 
 A Wordle-style web game written in **Python (Flask + SQLite)**.
 Players register, log in and try to guess a hidden 5-letter word in at most 5 guesses.
